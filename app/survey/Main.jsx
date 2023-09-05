@@ -15,6 +15,7 @@ import 'aos/dist/aos.css';
 const Main = () => {
   const [showSurvey, setShowSurvey] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
+  const [formData, setFromData] = useState(null);
   // const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +37,10 @@ const Main = () => {
     setShowLogo(false);
     // router.back();
   };
+
+
+ 
+
 
   return (
     <>
@@ -93,10 +98,10 @@ const Main = () => {
               className=""
             >
               {showSurvey ? (
-                <SurveyQuestion />
+                <SurveyQuestion  setFromData={setFromData} formData={formData}/>
               ) : (
                 <>
-                  <LeftHeading />
+                  <LeftHeading setFromData={setFromData} formData={formData} />
                   <div className="pl-5 lg:pl-[8%]">
                     <button
                       className="bg-purple-800 py-2 px-8 hover:text-white font-semibold text-white"

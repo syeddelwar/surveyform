@@ -1,23 +1,27 @@
-"use client"
+"use client";
+import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { data } from "./data.js";
+import { AiFillStar } from "react-icons/ai";
+import NextQuestion from "./NextQuestion.jsx";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { data } from './data.js';
-import { AiFillStar } from 'react-icons/ai';
-import NextQuestion from './NextQuestion.jsx';
+const SurveyQuestion = ({formData, setFromData}) => {
 
-const SurveyQuestion = () => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [currentData, setCurrentData] = useState(data.slice(0, 3));
   const [currentDataIndex, setCurrentDataIndex] = useState(0);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
 
-
-  const handleOptionChange = (questionId, optionId) => {
+  const handleOptionChange = (questionId, optionId, label) => {
     setSelectedOptions((prevSelectedOptions) => ({
       ...prevSelectedOptions,
       [questionId]: optionId,
+    }));
+
+    setFromData((prevSelectedOptions) => ({
+      ...prevSelectedOptions,
+      [questionId]: label,
     }));
   };
 
@@ -32,10 +36,17 @@ const SurveyQuestion = () => {
     });
   };
 
-  const OptionList = ({ options, questionId, selectedOption, handleOptionChange }) => {
+  const OptionList = ({
+    options,
+    questionId,
+    selectedOption,
+    handleOptionChange,
+  }) => {
     return options.map((option) => (
       <div
-        className={`${selectedOption === option.id && 'bg-purple-300'} flex items-center border-b border-gray-300 py-2 hover:bg-purple-300 pl-[4%] max-w-md`}
+        className={`${
+          selectedOption === option.id && "bg-purple-300"
+        } flex items-center border-b border-gray-300 py-2 hover:bg-purple-300 pl-[4%] max-w-md`}
         key={option.id}
       >
         <input
@@ -43,10 +54,13 @@ const SurveyQuestion = () => {
           id={option.id}
           name={`surveyOption_${questionId}`}
           className="mr-2 border-2 border-purple-950 bg-white w-4 h-4 rounded-none accent-purple-800"
-          onChange={() => handleOptionChange(questionId, option.id)}
+          onChange={() =>
+            handleOptionChange(questionId, option.id, option.label)
+          }
           checked={selectedOption === option.id}
           required
         />
+
         <label className="cursor-pointer" htmlFor={option.id}>
           {option.label}
         </label>
@@ -74,7 +88,6 @@ const SurveyQuestion = () => {
     }
   };
 
-
   return (
     <div className="pl-[7%] pt-[10%]">
       <form>
@@ -97,38 +110,32 @@ const SurveyQuestion = () => {
 
         {currentDataIndex === 3 && (
           <>
-           <NextQuestion></NextQuestion>
-            <div className="flex justify-end pr-5 mt-14 mb-14 items-center space-x-7">
-              {currentDataIndex > 0 && (
-                <button className="bg-purple-800 py-1 px-8 font-semibold text-white" onClick={handlePrev}>
-                   <span>Prev</span>
-                </button>
-              )}
-              {isSubmitVisible ? (
-                <button className="bg-purple-800 py-1 px-8 font-semibold text-white">
-                 <span>  Submit</span>
-                </button>
-              ) : (
-                <button className="bg-purple-800 py-1 px-8 font-semibold text-white" onClick={handleNext}>
-                  <span>Next</span>
-                </button>
-              )}
-            </div>
+            <NextQuestion
+              currentDataIndex={currentDataIndex}
+              isSubmitVisible={isSubmitVisible}
+              formData={formData}
+              handleNext={handleNext}
+              handlePrev={handlePrev}
+            ></NextQuestion>
           </>
         )}
 
         {currentDataIndex !== 3 && (
           <div className="flex justify-end pr-5 mt-14 mb-14 items-center space-x-7">
-          
-        
             {currentDataIndex > 0 && (
-              <button className="bg-purple-800 py-1 px-8 font-semibold text-white" onClick={handlePrev}>
+              <button
+                className="bg-purple-800 py-1 px-8 font-semibold text-white"
+                onClick={handlePrev}
+              >
                 <span>Prev</span>
               </button>
             )}
             {currentDataIndex + 3 < data.length && (
-              <button className="bg-purple-800 py-1 px-8 font-semibold text-white" onClick={handleNext}>
-               <span> Next</span>
+              <button
+                className="bg-purple-800 py-1 px-8 font-semibold text-white"
+                onClick={handleNext}
+              >
+                <span> Next</span>
               </button>
             )}
           </div>
@@ -139,7 +146,3 @@ const SurveyQuestion = () => {
 };
 
 export default SurveyQuestion;
-
-
-
-
